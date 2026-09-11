@@ -41,7 +41,6 @@ function LoginUser() {
 
         dispatch(loginSuccess({ email }));
         navigate("/visiter")
-        console.log("hello")
     };
 
     return (
