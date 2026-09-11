@@ -51,7 +51,7 @@ function LoginUser() {
                     <Typography component="h1" variant="h5">
                         Sign In
                     </Typography>
-                    <Box component="form">
+                    <Box component="form" onSubmit={handleLoginSubmit}>
                         <TextField
                             onChange={handleEmail}
                             margin="normal"
@@ -78,7 +78,7 @@ function LoginUser() {
                             label="Remember me"
                         />
                         <Button
-                            onClick={handleLoginSubmit}
+                           
                             type="submit"
                             fullWidth
                             variant="contained"
