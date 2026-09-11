@@ -41,7 +41,7 @@ function LoginUser() {
 
         dispatch(loginSuccess({ email }));
         navigate("/visiter")
-
+        console.log("hello")
     };
 
     return (
@@ -78,7 +78,7 @@ function LoginUser() {
                             label="Remember me"
                         />
                         <Button
-                           
+
                             type="submit"
                             fullWidth
                             variant="contained"
