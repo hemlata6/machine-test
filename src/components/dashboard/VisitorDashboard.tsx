@@ -1,90 +1,126 @@
-import { Box } from "@mui/material";
+import { Box, Button, Dialog, Grid } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { DataGrid } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess } from "../redux/slice/LoginSlice";
-import axios from 'axios';
+import { deleteVisiter, fetchVisitors } from "../redux/slice/visiterSlice";
+import type { AppDispatch } from "../../store";
+import AddVisiterModal from "./addVisiterModal";
+import EditVisiterModal from "./editVisiterModal";
 
 const VisitorDashboard = () => {
 
-    const dispatch = useDispatch();
-    const email = localStorage.getItem("userEmail")
+    const dispatch = useDispatch<AppDispatch>();
     const data = useSelector(
-        (state: any) => state.auth
+        (state: any) => state.visiter.visiters
     )
-    const [list, setList] = useState([]);
-    console.log("list", list);
+    const [addVisiterModal, setAddVisiterModal] = useState(false);
+     const [editVisiterModal, setEditVisiterModal] = useState(false);
+      const [editData, setEditData] = useState({});
 
     useEffect(() => {
-        if (email !== "") {
-            dispatch(loginSuccess(email));
-        }
-    }, [email])
-
-    useEffect(() => {
-        fetchData()
+        dispatch(fetchVisitors());
     }, [])
 
-    const fetchData = async () => {
-        try {
-            const res = await axios.get('https://jsonplaceholder.typicode.com/todos');
-            console.log('res', res);
-            
-            if (res.status === 200) {
-                setList(res.data)
-            }
+    const handleAddVisiter = () => {
+        setAddVisiterModal(true)
+    }
 
+    const handleClose = () => {
+        setAddVisiterModal(false)
+    }
 
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    const handleDelete = (id: number) => {
+        dispatch(deleteVisiter(id));
+    }
+
+    const handleEditRow = (row: any) => {
+        setEditData(row);
+        setEditVisiterModal(true);
+    }
+
+    const handleCloseEdit = () => {
+        setEditVisiterModal(false);
+    }
 
     const columns = [
         { field: 'id', headerName: 'ID', width: 90 },
         {
-            field: 'title',
+            field: 'name',
             headerName: 'Name',
             width: 150,
-            editable: true,
+            editable: false,
         },
         {
             field: 'phone',
             headerName: 'Phone Number',
             width: 150,
-            editable: true,
+            editable: false,
         },
         {
-            field: 'visitdate',
+            field: 'unit',
+            headerName: 'Unit Number',
+            width: 150,
+            editable: false,
+        },
+        {
+            field: 'visitDate',
             headerName: 'Visit Date',
-            type: 'number',
             width: 110,
-            editable: true,
+            editable: false,
+        },
+        {
+            field: 'action',
+            headerName: 'Action',
+            editable: false,
+             width: 200,
+            renderCell: (params: any) => {
+                return <Box>
+                    <Button onClick={() => handleEditRow(params.row)} variant="contained" sx={{ backgroundColor: "blueviolet", color: "#fff" }}>
+                        Edit
+                    </Button>
+                    <Button onClick={() => handleDelete(params.row.id)} variant="contained" color="error" sx={{ marginLeft: 1 }}>
+                        Delete
+                    </Button>
+                </Box>;
+            }
         }
     ];
 
-    const rows = [
-        { id: 1, name: email, phone: 123456 }
-    ];
 
     return (
         <React.Fragment>
-            <Box sx={{ height: 400, width: '100%' }}>
+            <Box sx={{ width: '100%', padding: 2, marginTop: 2, backgroundColor: '#fff', borderRadius: '8px' }}>
+                <Grid container spacing={2} sx={{ marginBottom: 2, color: '#000', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Grid size={{ xs: 12, sm: 6, md: 6, lg: 6 }}>
+                        <h2 style={{ textAlign: 'left' }}>Visitor Dashboard</h2>
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 6, md: 6, lg: 6 }} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button onClick={handleAddVisiter} sx={{ backgroundColor: "blueviolet", color: "#fff", textAlign: 'right' }}>
+                            Add Visitor
+                        </Button>
+                    </Grid>
+                </Grid>
                 <DataGrid
-                    rows={list}
+                    rows={data}
                     columns={columns}
                     initialState={{
                         pagination: {
                             paginationModel: {
-                                pageSize: 5,
+                                pageSize: 10,
                             },
                         },
                     }}
-                    pageSizeOptions={[5]}
+                    pageSizeOptions={[10]}
                     checkboxSelection
                     disableRowSelectionOnClick
                 />
             </Box>
+            <Dialog open={addVisiterModal} onClose={handleClose}>
+                <AddVisiterModal handleClose={handleClose} />
+            </Dialog>
+              <Dialog open={editVisiterModal} onClose={handleCloseEdit}>
+                <EditVisiterModal handleClose={handleCloseEdit} editData={editData} />
+            </Dialog>
         </React.Fragment>
     )
 }

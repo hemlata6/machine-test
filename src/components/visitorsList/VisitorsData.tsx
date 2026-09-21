@@ -1,0 +1,42 @@
+export let visitors = [
+  {
+    id: 1,
+    name: "Rahul Chauhan",
+    phone: "9876543210",
+    unit: "A-101",
+    visitDate: "2026-09-12",
+    status: "Pending",
+  },
+   {
+    id: 2,
+    name: "Hemlata Rajpoot",
+    phone: "9876543210",
+    unit: "A-102",
+    visitDate: "2026-09-12",
+    status: "success",
+  },
+   {
+    id: 3,
+    name: "Anjana Kumar",
+    phone: "9876543210",
+    unit: "A-103",
+    visitDate: "2026-09-12",
+    status: "Pending",
+  },
+   {
+    id: 4,
+    name: "Roshni Raikwar",
+    phone: "9876543210",
+    unit: "A-104",
+    visitDate: "2026-09-12",
+    status: "Pending",
+  },
+   {
+    id: 5,
+    name: "Rohit Kumar",
+    phone: "9876543210",
+    unit: "A-105",
+    visitDate: "2026-09-12",
+    status: "failed",
+  },
+];

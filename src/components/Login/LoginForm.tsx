@@ -10,37 +10,31 @@ import {
     Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { loginSuccess } from '../redux/slice/LoginSlice';
 import { useNavigate } from 'react-router-dom';
 
 function LoginUser() {
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate()
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("")
-    const data = useSelector(
-        (state: any) => state?.auth
-    )
-    console.log(data);
+    const navigate = useNavigate();
+    const [formValue, setFormValue] = useState({
+        email: "",
+        password: ""
+    });
 
-    const handleEmail = (event: any) => {
-        setEmail(event.target.value);
-    }
 
-    const handlePassword = (event: any) => {
-        setPassword(event.target.value);
+    const handleChange = (event: any) => {
+        setFormValue({
+            ...formValue,
+            [event.target.name]: event.target.value
+        });
     }
 
     const handleLoginSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        localStorage.setItem('userEmail', email);
-        localStorage.setItem('userPassword', password);
-
-        dispatch(loginSuccess({ email }));
-        navigate("/visiter")
+        localStorage.setItem('userEmail', formValue.email);
+        localStorage.setItem('userPassword', formValue.password);
+        localStorage.setItem('authToken', "true");
+        navigate("/visiter");
     };
 
     return (
@@ -52,7 +46,8 @@ function LoginUser() {
                     </Typography>
                     <Box component="form" onSubmit={handleLoginSubmit}>
                         <TextField
-                            onChange={handleEmail}
+                            onChange={handleChange}
+                            value={formValue.email}
                             margin="normal"
                             required
                             fullWidth
@@ -63,7 +58,8 @@ function LoginUser() {
                             autoFocus
                         />
                         <TextField
-                            onChange={handlePassword}
+                            onChange={handleChange}
+                            value={formValue.password}
                             margin="normal"
                             required
                             fullWidth

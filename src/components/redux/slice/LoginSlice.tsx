@@ -6,7 +6,7 @@ interface AuthState {
 }
 
 const storedEmail = localStorage.getItem('userEmail');
-console.log("storedEmail", storedEmail)
+
 const initialState: AuthState = {
   email: storedEmail || null,
   isAuthenticated: !!storedEmail,
@@ -18,7 +18,6 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     loginSuccess: (state, action) => {
-        console.log("action.payload", action.payload)
       state.email = action.payload;
       state.isAuthenticated = true;
     },
