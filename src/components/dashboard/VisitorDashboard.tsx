@@ -14,8 +14,8 @@ const VisitorDashboard = () => {
         (state: any) => state.visiter.visiters
     )
     const [addVisiterModal, setAddVisiterModal] = useState(false);
-     const [editVisiterModal, setEditVisiterModal] = useState(false);
-      const [editData, setEditData] = useState({});
+    const [editVisiterModal, setEditVisiterModal] = useState(false);
+    const [editData, setEditData] = useState({});
 
     useEffect(() => {
         dispatch(fetchVisitors());
@@ -40,6 +40,13 @@ const VisitorDashboard = () => {
 
     const handleCloseEdit = () => {
         setEditVisiterModal(false);
+    }
+
+    const handleLogout = () => {
+        localStorage.removeItem('userEmail');
+        localStorage.removeItem('userPassword');
+        localStorage.removeItem('authToken');
+        window.location.href = '/';
     }
 
     const columns = [
@@ -72,7 +79,7 @@ const VisitorDashboard = () => {
             field: 'action',
             headerName: 'Action',
             editable: false,
-             width: 200,
+            width: 200,
             renderCell: (params: any) => {
                 return <Box>
                     <Button onClick={() => handleEditRow(params.row)} variant="contained" sx={{ backgroundColor: "blueviolet", color: "#fff" }}>
@@ -90,6 +97,15 @@ const VisitorDashboard = () => {
     return (
         <React.Fragment>
             <Box sx={{ width: '100%', padding: 2, marginTop: 2, backgroundColor: '#fff', borderRadius: '8px' }}>
+                <Grid container spacing={2}>
+                    <Grid size={{ xs: 12, sm: 12, md: 12, lg: 12 }}>
+                       <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 2 }}>
+                         <Button onClick={handleLogout} >
+                            Logout
+                        </Button>
+                       </Box>
+                    </Grid>
+                </Grid>
                 <Grid container spacing={2} sx={{ marginBottom: 2, color: '#000', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Grid size={{ xs: 12, sm: 6, md: 6, lg: 6 }}>
                         <h2 style={{ textAlign: 'left' }}>Visitor Dashboard</h2>
@@ -118,7 +134,7 @@ const VisitorDashboard = () => {
             <Dialog open={addVisiterModal} onClose={handleClose}>
                 <AddVisiterModal handleClose={handleClose} />
             </Dialog>
-              <Dialog open={editVisiterModal} onClose={handleCloseEdit}>
+            <Dialog open={editVisiterModal} onClose={handleCloseEdit}>
                 <EditVisiterModal handleClose={handleCloseEdit} editData={editData} />
             </Dialog>
         </React.Fragment>
